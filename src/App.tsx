@@ -39,14 +39,23 @@ class App extends Component<{}, IState> {
   /**
    * Get new data from server and update the state with the new data
    */
-  getDataFromServer() {
+  
+getDataFromServer() {
+  let x = 0; // Initialize the counter 
+  const interval = setInterval(() => { // Execute code block repeatedly/regular intervals 
     DataStreamer.getData((serverResponds: ServerRespond[]) => {
-      // Update the state by creating a new array of data that consists of
-      // Previous data in the state and the new data from server
-      this.setState({ data: [...this.state.data, ...serverResponds] });
-    });
-  }
+      this.setState({
+        data: serverResponds,
+        showGraph: true
+      });
 
+      x++; // Increment counter after each data fetch
+      if (x > 1000) { // Check if counter exceeds 1000
+        clearInterval(interval); // Clear interval if condition is met
+      }
+    });
+  }, 100); //Set the interval to 100 milliseconds
+}
   /**
    * Render the App react component
    */
